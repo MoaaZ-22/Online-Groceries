@@ -1,16 +1,14 @@
-# online_groceries_app
+# Online Groceries
 
-A new Flutter project.
+## Photos:
 
-## Getting Started
+![Splash](https://user-images.githubusercontent.com/71730030/196810578-b9af5b28-4e0f-423f-8fa5-9bdcc726cb00.jpeg)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+![OnBoarding](https://user-images.githubusercontent.com/71730030/196810599-672f8fc4-6909-4844-819f-c0855b08a0a9.jpeg)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Login](https://user-images.githubusercontent.com/71730030/196810632-74d8d18e-b344-4c2a-9101-fe38004690d0.jpeg)
+
+
+![Register](https://user-images.githubusercontent.com/71730030/196810661-46e6e120-79a9-49a5-98c1-4e7ac9d51bc2.jpeg)
