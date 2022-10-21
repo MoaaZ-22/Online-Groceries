@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:online_groceries_app/modules/Login_Screen/Login_Cubit/states.dart';
-import 'package:online_groceries_app/modules/Login_Screen/login_screen.dart';
 import 'package:online_groceries_app/shared/components/components.dart';
-import '../../shared/components/consts.dart';
 import '../../shared/styles/colors.dart';
-import '../Login_Screen/Login_Cubit/cubit.dart';
+
 
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -60,7 +55,7 @@ class OnBoardingScreen extends StatelessWidget {
 
                 buttonText: 'Get Started',onPressed: ()
               {
-                pushReplacementNavigate(context, const LoginScreen());
+                submit(context);
               },),
               const SizedBox(height: 50.84,),
             ],

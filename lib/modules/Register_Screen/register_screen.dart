@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,24 @@ class RegisterScreen extends StatelessWidget {
     return BlocProvider(
       create:(context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
-        listener: (context, state){},
+        listener: (context, state){
+          if(state is RegisterSuccessState)
+            {
+              pushReplacementNavigate(context, const LoginScreen());
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar
+                (
+                  backgroundColor: defaultColor,
+                  elevation: 5,
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 4),
+                  content: const Text('Your account successfully created, now login !',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14,fontFamily: 'GilroySemiBold'),)));
+            } else if (state is RegisterErrorState)
+            {
+              showToast(message: 'Error With Your Data', state: ToastStates.error);
+            }
+        },
         builder: (context, state)
         {
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
@@ -104,7 +122,7 @@ class RegisterScreen extends StatelessWidget {
                                     isPassword: false,
                                     textInputType: TextInputType.emailAddress,
                                   ),
-                                  registerCubit.isEmailCorrect ? Positioned(
+                                  registerCubit.isEmailCorrect && registerEmailTextController.text.isNotEmpty ? Positioned(
                                       bottom: 10,
                                       child: Icon(Icons.check,color: defaultColor,size: 25,)) : const SizedBox()
                                 ],
@@ -139,14 +157,23 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 30,),
-                              ReusableTextButton(
-                                buttonText: 'Sign Up',onPressed: ()
+                              ConditionalBuilder(condition: state is! RegisterLoadingState,
+                                  builder: (context)
                               {
-                                if(registerKey.currentState!.validate())
+                                return ReusableTextButton(
+                                  buttonText: 'Sign Up',onPressed: ()
+                                {
+                                  if(registerKey.currentState!.validate())
                                   {
-                                    print('Validated');
+                                    registerCubit.createUser
+                                      (
+                                      name: registerNameTextController.text,
+                                      email: registerEmailTextController.text,
+                                      password: registerPasswordTextController.text,
+                                    );
                                   }
-                              },),
+                                },);
+                              }, fallback: (context) => circularProIndicator()),
                               const SizedBox(height: 15,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

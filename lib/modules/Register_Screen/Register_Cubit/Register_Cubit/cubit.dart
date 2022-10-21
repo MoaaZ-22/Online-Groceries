@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/modules/Register_Screen/Register_Cubit/Register_Cubit/states.dart';
+import 'package:online_groceries_app/shared/network/remote/dio_helper.dart';
+
+import '../../../../models/Register_Model/register_model.dart';
+import '../../../../shared/network/end_points.dart';
 
 class RegisterCubit extends Cubit<RegisterStates> {
   RegisterCubit() : super(InitialRegisterState());
@@ -79,4 +81,33 @@ class RegisterCubit extends Cubit<RegisterStates> {
       }
     emit(ShowCorrectEmailRegisterScreen());
   }
+
+  RegisterModel? registerModel;
+
+  void createUser({required String? name, required String? email, required String? password})
+  {
+  emit(RegisterLoadingState());
+
+  DioHelper.postData(url: SIGNUP,
+  data:
+        {
+          'name' : name,
+          'email' : email,
+          'password' : password,
+        }
+    ).then((value)
+    {
+      registerModel = RegisterModel.fromJson(value.data);
+      print(registerModel!.message);
+      print(registerModel!.user!.name);
+
+      emit(RegisterSuccessState(registerModel!));
+    })
+    .catchError((error)
+    {
+    emit(RegisterErrorState(error: error.toString()));
+   }
+   );
+   }
+
 }

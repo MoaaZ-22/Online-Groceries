@@ -9,10 +9,8 @@ class DioHelper {
     dio = Dio(
       // Here Base Url
         BaseOptions(
-
-          // https://lavie.orangedigitalcenteregypt.com
-          // base Url For La Vie
-            baseUrl: 'https://lavie.orangedigitalcenteregypt.com',
+          // base Url For Online Groceries
+            baseUrl: 'http://mustafamahmaoud.byethost7.com',
             receiveDataWhenStatusError: true,
             headers: {'Content-Type': 'application/json'}));
   }

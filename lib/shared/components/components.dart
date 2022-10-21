@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../modules/Login_Screen/login_screen.dart';
+import '../network/local/cache_helper.dart';
 import '../styles/colors.dart';
 import '../styles/slide_transition_animation.dart';
+import 'consts.dart';
 
 void printFullText(String text) {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
@@ -49,11 +52,11 @@ Color chooseToastColor(ToastStates state) {
 
 Widget circularProIndicator() => Center(
   child: SizedBox(
-    height: 50,
-    width: 50,
+    width: 20,
+    height: 60,
     child: CircularProgressIndicator(
       color: defaultColor,
-      strokeWidth: 3,
+      strokeWidth: 5,
     ),
   ),
 );
@@ -103,6 +106,7 @@ class ReusableTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: 60,
       width: double.infinity,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -110,7 +114,6 @@ class ReusableTextButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18), // <-- Radius
               ),
               backgroundColor: defaultColor,
-              padding: const EdgeInsets.only(top: 22.5, bottom: 22.5),
               alignment: AlignmentDirectional.center
           ),
           onPressed: onPressed, child:  Text(
@@ -120,6 +123,16 @@ class ReusableTextButton extends StatelessWidget {
           fontSize: 18,fontFamily: 'GilroySemiBold',color: Colors.white),)),
     );
   }
+}
+
+// Method For Save In cache To Skip OnBoarding Screen When User Open
+void submit(BuildContext context)
+{
+  CacheHelper.saveData(key: 'Onboarding', value: true).then((value) =>
+  {
+    pushReplacementNavigate(context, const LoginScreen())
+  }
+  );
 }
 
 

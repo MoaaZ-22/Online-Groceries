@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:online_groceries_app/modules/Login_Screen/Login_Cubit/cubit.dart';
 import 'package:online_groceries_app/modules/Login_Screen/Login_Cubit/states.dart';
 import 'package:online_groceries_app/shared/styles/icons.dart';
+import '../../layout/home_layout_screen.dart';
 import '../../shared/components/components.dart';
+import '../../shared/components/consts.dart';
+import '../../shared/network/local/cache_helper.dart';
 import '../../shared/styles/colors.dart';
 import '../Register_Screen/register_screen.dart';
 
@@ -18,7 +22,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginKey = GlobalKey<FormState>();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -31,9 +34,22 @@ class LoginScreen extends StatelessWidget {
       create:(context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>
       (
-        listener: (context, state){},
+        listener: (context, state){
+          if(state is LoginSuccessState)
+            {
+              CacheHelper.saveData(key: 'token', value: state.loginModel.user?.token).then((value) =>
+              {
+
+                token = CacheHelper.getDataIntoShPre(key: 'token'),
+                emailTextController.clear(),
+                passwordTextController.clear(),
+                pushReplacementNavigate(context, const HomeLayoutScreen())
+              });
+            }
+        },
         builder: (context, state)
         {
+
           var loginCubit = LoginCubit.get(context);
           return Scaffold(
               extendBody: true,
@@ -96,9 +112,11 @@ class LoginScreen extends StatelessWidget {
                                     },
                                     textInputType: TextInputType.emailAddress,
                                   ),
-                                  loginCubit.isLoginEmailCorrect ? Positioned(
-                                      bottom: 10,
-                                      child: Icon(Icons.check,color: defaultColor,size: 25,)) : const SizedBox()
+                                  loginCubit.isLoginEmailCorrect && emailTextController.text.isNotEmpty ?
+                                  Positioned(
+                                      bottom: loginKey.currentState!.validate() ? 20:10,
+                                      child: Icon(Icons.check,color: defaultColor,size: 25,)) :
+                                  const SizedBox()
                                 ],
                               ),
                               const SizedBox(height: 40,),
@@ -121,14 +139,19 @@ class LoginScreen extends StatelessWidget {
                                     child: const Text('Forgot Password?',style: TextStyle(fontSize: 14,fontFamily: 'GilroyMedium'),)),
                               ),
                               const SizedBox(height: 30,),
-                              ReusableTextButton(
-                                buttonText: 'Log in',onPressed: ()
-                              {
-                                if(loginKey.currentState!.validate())
-                                  {
-                                    print('Validated');
-                                  }
-                              },),
+                              ConditionalBuilder(
+                                  condition: state is! LoginLoadingState,
+                                  builder: (context){
+                                    return ReusableTextButton(
+                                      buttonText: 'Log in',onPressed: ()
+                                    {
+                                      if(loginKey.currentState!.validate())
+                                      {
+                                        loginCubit.login(email: emailTextController.text, password: passwordTextController.text);
+                                      }
+                                    },);
+                                  },
+                                  fallback: (context) =>circularProIndicator()),
                               const SizedBox(height: 15,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

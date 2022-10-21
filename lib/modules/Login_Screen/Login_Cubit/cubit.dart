@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:online_groceries_app/models/Login_Model/login_model.dart';
 import 'package:online_groceries_app/modules/Login_Screen/Login_Cubit/states.dart';
+import '../../../shared/network/end_points.dart';
+import '../../../shared/network/remote/dio_helper.dart';
 
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -63,5 +66,25 @@ class LoginCubit extends Cubit<LoginStates> {
         isLoginEmailCorrect = false;
       }
     emit(ShowCorrectEmailLoginScreen());
+  }
+
+  LoginModel? loginModel;
+  void login({required String? email, required String? password})
+  {
+    emit(LoginLoadingState());
+    DioHelper.postData(url: SIGNIN, data:
+    {
+      'email' : email,
+      'password' : password
+    }
+    )
+        .then((value) {
+       loginModel =LoginModel.fromJson(value.data);
+       print(loginModel!.msg);
+       print(loginModel!.user!.name);
+       print(loginModel!.user!.token);
+       emit(LoginSuccessState(loginModel!));
+    })
+        .catchError((error){emit(LoginErrorState(error: error.toString()));});
   }
 }

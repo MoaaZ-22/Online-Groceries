@@ -71,4 +71,8 @@ class IconlyBroken {
   static const IconData arrow_right_3 = IconData(0xe83c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData arrow_right_circle = IconData(0xe83d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData arrow_right_square = IconData(0xe83e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shop = IconData(0xe83f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData account = IconData(0xe840, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cart2 = IconData(0xe841, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData favourite = IconData(0xe843, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
