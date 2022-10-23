@@ -6,3 +6,5 @@ Color defaultColor = const Color(0xff53B175);
 Color defaultGreyColor = const Color(0xff7C7C7C);
 
 Color searchBackgroundColor = const Color(0xffF2F3F2);
+
+Color rateColor = const Color(0xffF3603F);

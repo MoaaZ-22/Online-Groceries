@@ -47,6 +47,7 @@ dependencies:
   carousel_slider: ^4.1.1
   flutter_native_splash: ^2.2.9
   cached_network_image: ^3.2.2
+  rate: ^0.0.2
 
 flutter_native_splash:
   background_image: "assets/images/Splash_Screen.png"
@@ -108,6 +109,12 @@ flutter:
     - family: GilroyMedium
       fonts:
         - asset: assets/fonts/Gilroy-Medium.ttf
+
+
+    - family: GilroyBold
+      fonts:
+        - asset: assets/fonts/Gilroy-Bold.ttf
+
 
     - family: IconlyBroken
       fonts:

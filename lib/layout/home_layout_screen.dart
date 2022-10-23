@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/shared/cubit/cubit.dart';
 import 'package:online_groceries_app/shared/cubit/states.dart';
-import 'package:online_groceries_app/shared/styles/colors.dart';
 
 class HomeLayoutScreen extends StatelessWidget {
   const HomeLayoutScreen({Key? key}) : super(key: key);
@@ -23,13 +22,21 @@ class HomeLayoutScreen extends StatelessWidget {
             ),
             body: appCubit.homeLayoutScreens[appCubit.bottomNavigationBarCurrentIndex!],
             backgroundColor: Colors.white,
-            bottomNavigationBar: SizedBox(
+            bottomNavigationBar: Container(
               height: 82,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+                boxShadow: <BoxShadow>[
+              BoxShadow(
+              color: Colors.grey.shade300,
+                blurRadius:1.5,
+              ),
+              ],
+              ),
               child: ClipRRect(
                 borderRadius: const BorderRadiusDirectional.only(topStart: Radius.circular(15),topEnd: Radius.circular(15)),
                 child: BottomNavigationBar(
                   currentIndex: appCubit.bottomNavigationBarCurrentIndex!,
-                  elevation: 10,
                   onTap: (index)
                   {
                     appCubit.changeBottomNavIndex(index);

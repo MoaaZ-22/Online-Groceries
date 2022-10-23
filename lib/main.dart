@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/layout/home_layout_screen.dart';
 import 'package:online_groceries_app/modules/Login_Screen/login_screen.dart';
@@ -9,7 +7,7 @@ import 'package:online_groceries_app/shared/bloc_observer.dart';
 import 'package:online_groceries_app/shared/cubit/cubit.dart';
 import 'package:online_groceries_app/shared/network/local/cache_helper.dart';
 import 'package:online_groceries_app/shared/network/remote/dio_helper.dart';
-import 'package:online_groceries_app/shared/styles/colors.dart';
+import 'package:online_groceries_app/shared/styles/themes.dart';
 
 void main() async {
 
@@ -53,35 +51,7 @@ class OnlineGroceries extends StatelessWidget {
       child: MaterialApp(
       debugShowCheckedModeBanner: false,
       home: startWidget,
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.dark,
-            )
-          ),
-            bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              type: BottomNavigationBarType.fixed,
-              showUnselectedLabels: true,
-              showSelectedLabels: true,
-              selectedLabelStyle: TextStyle(
-                  fontSize: 12, fontFamily: 'GilroySemiBold',color: defaultColor,height: 1.5),
-              unselectedLabelStyle: const TextStyle(height: 1.5,
-                  fontSize: 12, fontFamily: 'GilroySemiBold',color: Color(0xff181725)),
-              selectedItemColor: defaultColor,
-              unselectedItemColor: const Color(0xff181725),
-              selectedIconTheme: IconThemeData(
-                size: 22,
-                color: defaultColor,
-              ),
-              unselectedIconTheme: const IconThemeData(
-                  color:Color(0xff181725),
-                  size: 25
-              ),
-              backgroundColor: Colors.white,
-            ),
-            scaffoldBackgroundColor: Colors.white
-        ),
+        theme: appLightTheme,
     ),
     );
   }

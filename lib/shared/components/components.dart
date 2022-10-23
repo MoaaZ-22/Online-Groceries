@@ -135,4 +135,43 @@ void submit(BuildContext context)
   );
 }
 
+class ReusableHomeRowText extends StatelessWidget {
+  final String text;
+  final void Function()? seeAllFunction;
+  final double? leftPadding;
+  final double? rightPadding;
+  const ReusableHomeRowText({Key? key, required this.text, this.seeAllFunction,this.leftPadding, this.rightPadding}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: leftPadding ?? 0, right: rightPadding ?? 0),
+      child: Row(
+        children: [
+          Text(text, style: Theme.of(context).textTheme.bodyText1,),
+          const Spacer(),
+          MaterialButton(
+            height: 25,
+            minWidth: 0,
+            padding: const EdgeInsets.only(left: 2,right: 2),
+            elevation: 0,
+            onPressed: seeAllFunction,
+            child: Text('See all', style: Theme.of(context).textTheme.bodyText2),
+          ),
+          const SizedBox(width: 15,)
+        ],
+      ),
+    );
+  }
+}
+
+Widget myDivider() => Container(
+  width: double.infinity,
+  height: 1.0,
+  color: Colors.grey[300],
+);
+
+
+
+
 

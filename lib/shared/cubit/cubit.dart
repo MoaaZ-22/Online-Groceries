@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_full_hex_values_for_flutter_colors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +17,10 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
 
   int? bottomNavigationBarCurrentIndex = 0;
+
+  int activeIndex = 0;
+
+  int detailsActiveIndex = 0;
 
   //List For Bottom Navigation Bar
   List<BottomNavigationBarItem> bottomNavListItem =
@@ -42,5 +46,52 @@ class AppCubit extends Cubit<AppStates> {
   {
     bottomNavigationBarCurrentIndex = index;
     emit(NavBarChangeIndex());
+  }
+
+  List<Widget> sliderWidget =
+  [
+    Image.network(
+        fit: BoxFit.cover,
+        'https://img.freepik.com/free-photo/concept-healthy-eating-top-view_23-2148502279.jpg?w=826&t=st=1666376143~exp=1666376743~hmac=a6907350be00de653beabfc7d85508ee4f728c13f5bb08499227615219851ebf'),
+    Image.network(
+        fit: BoxFit.cover,
+        'https://img.freepik.com/free-photo/concept-healthy-eating-top-view_23-2148502279.jpg?w=826&t=st=1666376143~exp=1666376743~hmac=a6907350be00de653beabfc7d85508ee4f728c13f5bb08499227615219851ebf'),
+    Image.network(
+        fit: BoxFit.fill,
+        'https://img.freepik.com/free-photo/concept-healthy-eating-top-view_23-2148502279.jpg?w=826&t=st=1666376143~exp=1666376743~hmac=a6907350be00de653beabfc7d85508ee4f728c13f5bb08499227615219851ebf'),
+  ];
+
+  List<Widget> detailsWidget =
+  [
+    Image.asset('assets/images/bananas.png'),
+    Image.asset('assets/images/beef.png'),
+    Image.asset('assets/images/pepper red.png'),
+  ];
+
+  void changeSmoothPage(int index)
+  {
+    activeIndex = index;
+    emit(SmoothPageIndex());
+  }
+
+  List colors =
+      [
+        const Color(0xff26f8a44c),
+        const Color(0xff2653B175),
+        const Color(0xff40F7A593),
+        const Color(0xff40D3B0E0),
+        const Color(0xff40FDE598),
+      ];
+
+  void changeDetailsSmoothPage(int index)
+  {
+    activeIndex = index;
+    emit(SmoothDetailsPageIndex());
+  }
+
+  void changeFavorites(bool isFavorites)
+  {
+    isFavorites = !isFavorites;
+    emit(ChangeItemFavorites());
   }
 }
