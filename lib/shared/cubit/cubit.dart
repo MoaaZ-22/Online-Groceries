@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, use_full_hex_values_for_flutter_colors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/modules/Account_Screen/account_screen.dart';
@@ -9,7 +8,6 @@ import 'package:online_groceries_app/modules/Favourites_Screen/favourites_screen
 import 'package:online_groceries_app/modules/Shop_Screen/shop_screen.dart';
 import 'package:online_groceries_app/shared/cubit/states.dart';
 import 'package:online_groceries_app/shared/styles/icons.dart';
-
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppState());
@@ -81,7 +79,28 @@ class AppCubit extends Cubit<AppStates> {
         const Color(0xff40F7A593),
         const Color(0xff40D3B0E0),
         const Color(0xff40FDE598),
+        const Color(0xff26836AF626),
       ];
+
+  List exploreColors =
+  [
+    const Color(0xff1A53B175),
+    const Color(0xff1AF8A44C),
+    const Color(0xff33F7A593),
+    const Color(0xff40D3B0E0),
+    const Color(0xff40B7DFF5),
+    const Color(0xff26836AF6),
+  ];
+
+  List borderColors =
+  [
+    const Color(0xffB353B175),
+    const Color(0xffB3F8A44C),
+    const Color(0xffF7A593),
+    const Color(0xffD3B0E0),
+    const Color(0xffB3FDE598),
+    const Color(0xff80836AF6),
+  ];
 
   void changeDetailsSmoothPage(int index)
   {

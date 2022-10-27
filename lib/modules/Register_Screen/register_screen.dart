@@ -161,6 +161,8 @@ class RegisterScreen extends StatelessWidget {
                                   builder: (context)
                               {
                                 return ReusableTextButton(
+                                  textColor: Colors.white,
+                                  color: defaultColor,
                                   buttonText: 'Sign Up',onPressed: ()
                                 {
                                   if(registerKey.currentState!.validate())

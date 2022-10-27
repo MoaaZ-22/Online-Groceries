@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../layout/home_layout_screen.dart';
 import '../../modules/Login_Screen/login_screen.dart';
+import '../cubit/cubit.dart';
 import '../network/local/cache_helper.dart';
 import '../styles/colors.dart';
+import '../styles/icons.dart';
 import '../styles/slide_transition_animation.dart';
 import 'consts.dart';
 
@@ -101,7 +104,9 @@ class ReusableTextFormFiled extends StatelessWidget {
 class ReusableTextButton extends StatelessWidget {
   final String? buttonText;
   final void Function()? onPressed;
-  const ReusableTextButton({Key? key, this.buttonText, this.onPressed}) : super(key: key);
+  final Color color;
+  final Color textColor;
+  const ReusableTextButton({Key? key, this.buttonText, this.onPressed, required this.color, required this.textColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +118,14 @@ class ReusableTextButton extends StatelessWidget {
               shape:  RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18), // <-- Radius
               ),
-              backgroundColor: defaultColor,
+              backgroundColor: color,
               alignment: AlignmentDirectional.center
           ),
           onPressed: onPressed, child:  Text(
         textDirection: TextDirection.ltr,
-        buttonText!,style: const TextStyle(
+        buttonText!,style: TextStyle(
           decoration: TextDecoration.none,
-          fontSize: 18,fontFamily: 'GilroySemiBold',color: Colors.white),)),
+          fontSize: 18,fontFamily: 'GilroySemiBold',color: textColor),)),
     );
   }
 }
@@ -170,6 +175,127 @@ Widget myDivider() => Container(
   height: 1.0,
   color: Colors.grey[300],
 );
+
+PreferredSizeWidget reusableAppBar({required String? appBarText, required double? toolbarHeight, required bool? centerTitle})
+  {
+    return AppBar(
+      centerTitle: centerTitle,
+      backgroundColor: Colors.white,
+      toolbarHeight: toolbarHeight,
+      elevation: 0,
+      shape: Border(
+          bottom: BorderSide(color: Colors.grey.shade300, width: 1)
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Text(appBarText!, style: const TextStyle(fontSize: 20,color: Colors.black, fontFamily: 'GilroyBold'),),
+      ),
+    );
+  }
+
+  class ReusableAccount extends StatelessWidget {
+    final String text;
+    final IconData prefixIcon;
+    final void Function()? onPressed;
+    const ReusableAccount({Key? key, required this.text, required this.prefixIcon, this.onPressed}) : super(key: key);
+
+    @override
+    Widget build(BuildContext context) {
+      return MaterialButton(onPressed: onPressed,
+        shape: Border(
+            bottom: BorderSide(color: Colors.grey.shade300, width: 1)
+        ),
+        height: 50,
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 5),
+        child: Row(
+          children:
+          [
+            Icon(prefixIcon,size: 20,color: Colors.black,),
+            const SizedBox(width: 10,),
+            Text(text, style: const TextStyle(fontSize: 18, fontFamily: 'GilroySemiBold'),),
+            const Spacer(),
+            const Icon(IconlyBroken.arrow_right_2)
+          ],
+        ),
+      );
+    }
+  }
+
+class ReusableShowModalBottomSheet extends StatelessWidget {
+  final String text;
+  final void Function()? onPressed;
+  final Widget widget;
+  const ReusableShowModalBottomSheet({Key? key, required this.text, this.onPressed, required this.widget}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(onPressed: onPressed,
+      height: 50,
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 5),
+      child: Row(
+        children: [
+          Text(text, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: defaultGreyColor, fontSize: 18,),),
+          const Spacer(),
+          widget,
+          const SizedBox(width: 10,),
+          const Icon(
+            IconlyBroken.arrow_right_2,
+            color: Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future dialogBox(BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      elevation: 2,
+      backgroundColor: Colors.white,
+      title: Column(
+        children: [
+          Align(
+            alignment: AlignmentDirectional.topStart,
+            child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                radius: 60,
+                onTap:(){
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                )),
+          ),
+          const SizedBox(height: 15,),
+          Center(
+            child: Image.asset(
+              'assets/images/image 13.png',width: 200,height: 200,),
+          ),
+          const SizedBox(height: 20,),
+          Text('Oops! Order Failed', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 26, color: Colors.black),),
+          const SizedBox(height: 10,),
+          Text('Something went temblor wrong.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, fontFamily: 'GilroyMedium', color: defaultGreyColor),
+          ),
+          const SizedBox(height: 60,),
+          ReusableTextButton(buttonText: 'Track Order', color: defaultColor, textColor: Colors.white, onPressed: (){},),
+          const SizedBox(height: 20,),
+          InkWell(
+              onTap: (){
+                AppCubit.get(context).bottomNavigationBarCurrentIndex = 0;
+                pushReplacementNavigate(context, const HomeLayoutScreen());
+              },
+              child: Text('Back to home', style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 18, color: Colors.black),)),
+        ],
+      ),
+    ));
+
+
+
 
 
 

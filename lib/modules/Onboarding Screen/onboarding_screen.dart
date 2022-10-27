@@ -52,7 +52,8 @@ class OnBoardingScreen extends StatelessWidget {
                     fontSize: 15,fontFamily: 'GilroyMedium',color: defaultGreyColor),),
               const SizedBox(height: 30,),
               ReusableTextButton(
-
+                textColor: Colors.white,
+                color: defaultColor,
                 buttonText: 'Get Started',onPressed: ()
               {
                 submit(context);

@@ -14,24 +14,16 @@ class HomeLayoutScreen extends StatelessWidget {
         {
           var appCubit = AppCubit.get(context);
           return Scaffold(
-            extendBody: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              toolbarHeight: 0,
-              elevation: 0,
-            ),
-            body: appCubit.homeLayoutScreens[appCubit.bottomNavigationBarCurrentIndex!],
-            backgroundColor: Colors.white,
             bottomNavigationBar: Container(
-              height: 82,
+              height: 80,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
                 boxShadow: <BoxShadow>[
-              BoxShadow(
-              color: Colors.grey.shade300,
-                blurRadius:1.5,
-              ),
-              ],
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius:1.5,
+                  ),
+                ],
               ),
               child: ClipRRect(
                 borderRadius: const BorderRadiusDirectional.only(topStart: Radius.circular(15),topEnd: Radius.circular(15)),
@@ -45,6 +37,13 @@ class HomeLayoutScreen extends StatelessWidget {
                 ),
               ),
             ),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              toolbarHeight: 0,
+              elevation: 0,
+            ),
+            body: appCubit.homeLayoutScreens[appCubit.bottomNavigationBarCurrentIndex!],
+            backgroundColor: Colors.white,
           );
         });
   }

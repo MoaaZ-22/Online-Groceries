@@ -20,7 +20,7 @@ class ShopScreen extends StatelessWidget {
         listener: (context,state){},
         builder: (context, state){
           return SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.13),
+            padding: const EdgeInsets.only(bottom: 15),
             scrollDirection: Axis.vertical,
             physics: const BouncingScrollPhysics(),
             child: Column(

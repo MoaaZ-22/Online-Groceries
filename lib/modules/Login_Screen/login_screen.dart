@@ -143,6 +143,8 @@ class LoginScreen extends StatelessWidget {
                                   condition: state is! LoginLoadingState,
                                   builder: (context){
                                     return ReusableTextButton(
+                                      textColor: Colors.white,
+                                      color: defaultColor,
                                       buttonText: 'Log in',onPressed: ()
                                     {
                                       if(loginKey.currentState!.validate())
