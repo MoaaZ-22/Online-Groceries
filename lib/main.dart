@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/layout/home_layout_screen.dart';
 import 'package:online_groceries_app/modules/Login_Screen/login_screen.dart';
 import 'package:online_groceries_app/modules/Onboarding%20Screen/onboarding_screen.dart';
 import 'package:online_groceries_app/shared/bloc_observer.dart';
+import 'package:online_groceries_app/shared/components/consts.dart';
 import 'package:online_groceries_app/shared/cubit/cubit.dart';
 import 'package:online_groceries_app/shared/network/local/cache_helper.dart';
 import 'package:online_groceries_app/shared/network/remote/dio_helper.dart';
@@ -15,16 +17,18 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
 
+  await Firebase.initializeApp();
+
   // bool to Check If User See onBoarding
   bool? onBoarding = CacheHelper.getDataIntoShPre(key: 'Onboarding');
 
   // String To Check If User Login Or Not
-  String? token = CacheHelper.getDataIntoShPre(key: 'token');
+  uId = CacheHelper.getDataIntoShPre(key: 'uId');
 
   late Widget widget;
   if(onBoarding != null)
     {
-      if(token != null) {
+      if(uId != null) {
         widget = const HomeLayoutScreen();
       } else {
         widget = const LoginScreen();
@@ -46,7 +50,7 @@ class OnlineGroceries extends StatelessWidget {
     return MultiBlocProvider(
       providers:
       [
-        BlocProvider(create: (BuildContext context) => AppCubit(),),
+        BlocProvider(create: (BuildContext context) => AppCubit()..getUserData()..getExclusiveProduct()..getBestSellingProduct()..getAllProduct()..getPulses()..getRice(),),
       ],
       child: MaterialApp(
       debugShowCheckedModeBanner: false,

@@ -55,17 +55,18 @@ Color chooseToastColor(ToastStates state) {
 
 Widget circularProIndicator() => Center(
   child: SizedBox(
-    width: 20,
-    height: 60,
+    width: 40,
+    height: 40,
     child: CircularProgressIndicator(
       color: defaultColor,
-      strokeWidth: 5,
+      strokeWidth: 3,
     ),
   ),
 );
 
 class ReusableTextFormFiled extends StatelessWidget {
   final String? labelText;
+  final String? hintText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
@@ -73,7 +74,7 @@ class ReusableTextFormFiled extends StatelessWidget {
   final TextInputType? textInputType;
   final bool? isPassword;
   final void Function()? suffixIconFunc;
-  const ReusableTextFormFiled({Key? key, this.labelText, required this.controller,required this.validator, this.suffixIcon, this.suffixIconFunc, this.textInputType, this.isPassword, this.onChanged}) : super(key: key);
+  const ReusableTextFormFiled({Key? key, this.labelText, required this.controller,required this.validator, this.suffixIcon, this.suffixIconFunc, this.textInputType, this.isPassword, this.onChanged, this.hintText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,7 @@ class ReusableTextFormFiled extends StatelessWidget {
       obscureText: isPassword!,
       style: const TextStyle(fontFamily: 'GilroyMedium',fontSize: 18,wordSpacing: 5,letterSpacing: 1),
       decoration: InputDecoration(
+        hintText: hintText,
         labelText: labelText,
         errorStyle: const TextStyle(fontFamily: 'GilroySemiBold',fontSize: 12),
         suffixIcon: suffixIcon != null ? IconButton(
@@ -293,6 +295,18 @@ Future dialogBox(BuildContext context) => showDialog(
         ],
       ),
     ));
+
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({context, Color? backgroundColor, String? text}){
+  return ScaffoldMessenger.of(context).showSnackBar(SnackBar
+    (
+      backgroundColor: backgroundColor,
+      elevation: 5,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 4),
+      content: Text(text!,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 14,fontFamily: 'GilroySemiBold'),)));
+}
 
 
 

@@ -1,10 +1,9 @@
 // ignore_for_file: avoid_print
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/modules/Register_Screen/Register_Cubit/Register_Cubit/states.dart';
-import 'package:online_groceries_app/shared/network/remote/dio_helper.dart';
-
-import '../../../../models/Register_Model/register_model.dart';
-import '../../../../shared/network/end_points.dart';
+import '../../../../models/User_Model/user_model.dart';
 
 class RegisterCubit extends Cubit<RegisterStates> {
   RegisterCubit() : super(InitialRegisterState());
@@ -23,7 +22,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
     isPasswordShow = !isPasswordShow;
     emit(ShowPasswordRegisterScreen());
   }
-
 
   // Validation Function For User Name
   String? userName(value)
@@ -82,32 +80,47 @@ class RegisterCubit extends Cubit<RegisterStates> {
     emit(ShowCorrectEmailRegisterScreen());
   }
 
-  RegisterModel? registerModel;
-
-  void createUser({required String? name, required String? email, required String? password})
+  // Method For Pass Data To Firebase With Name And Password
+  void userRegister({required String name, required String email, required String password})
   {
-  emit(RegisterLoadingState());
+    emit(RegisterLoadingState());
 
-  DioHelper.postData(url: SIGNUP,
-  data:
-        {
-          'name' : name,
-          'email' : email,
-          'password' : password,
-        }
-    ).then((value)
-    {
-      registerModel = RegisterModel.fromJson(value.data);
-      print(registerModel!.message);
-      print(registerModel!.user!.name);
+    FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+    ).then((value) {
+      print(value.user!.email);
+      print(value.user!.uid);
+      userCreate(name: name, email: email, uId:value.user!.uid);
+      emit(RegisterSuccessState());
+    }).catchError((error){
+      print('${error.toString()} ******************************************************');
+      emit(RegisterErrorState(error: error.toString()));
+    });
+  }
 
-      emit(RegisterSuccessState(registerModel!));
-    })
-    .catchError((error)
+  void userCreate({required String name, required String email, required String uId})
+  {
+    // Call User Model That I Create It
+    UserModel userModel = UserModel(
+        name: name,
+        email: email,
+        uId: uId,
+        image:'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?w=740',
+    );
+
+    FirebaseFirestore.instance.
+    collection("users").
+    doc(uId)
+        .set(userModel.toMap()).then((value)
     {
-    emit(RegisterErrorState(error: error.toString()));
-   }
-   );
-   }
+     emit(CreateUserSuccessState());
+    }).catchError((error){
+      print("${error.toString()}**********************************");
+      emit(CreateUserErrorState(error: error.toString()));
+    });
+
+  }
+
 
 }

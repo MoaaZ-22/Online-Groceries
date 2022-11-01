@@ -37,14 +37,18 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state){
           if(state is LoginSuccessState)
             {
-              CacheHelper.saveData(key: 'token', value: state.loginModel.user?.token).then((value) =>
+              CacheHelper.saveData(key: 'uId', value: state.uId).then((value) =>
               {
 
-                token = CacheHelper.getDataIntoShPre(key: 'token'),
+                uId = CacheHelper.getDataIntoShPre(key: 'uId'),
                 emailTextController.clear(),
                 passwordTextController.clear(),
                 pushReplacementNavigate(context, const HomeLayoutScreen())
               });
+            }
+          else if (state is LoginErrorState)
+            {
+              showToast(message: state.error, state: ToastStates.error);
             }
         },
         builder: (context, state)
@@ -114,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                   loginCubit.isLoginEmailCorrect && emailTextController.text.isNotEmpty ?
                                   Positioned(
-                                      bottom: loginKey.currentState!.validate() ? 20:10,
+                                      bottom: loginKey.currentState!.validate() ? 10:10,
                                       child: Icon(Icons.check,color: defaultColor,size: 25,)) :
                                   const SizedBox()
                                 ],
@@ -149,7 +153,7 @@ class LoginScreen extends StatelessWidget {
                                     {
                                       if(loginKey.currentState!.validate())
                                       {
-                                        loginCubit.login(email: emailTextController.text, password: passwordTextController.text);
+                                        loginCubit.userLogin(email: emailTextController.text, password: passwordTextController.text);
                                       }
                                     },);
                                   },

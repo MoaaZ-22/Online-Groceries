@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_groceries_app/modules/Register_Screen/register_screen.dart';
 import '../network/local/cache_helper.dart';
 
-String? token = '';
+String? uId = '';
 
 final GlobalKey<ScaffoldState> loginScaffoldKey = GlobalKey<ScaffoldState>();
 

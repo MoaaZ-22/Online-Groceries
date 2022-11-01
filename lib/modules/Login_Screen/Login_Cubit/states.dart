@@ -1,5 +1,3 @@
-import '../../../models/Login_Model/login_model.dart';
-
 abstract class LoginStates {}
 class InitialLoginState extends LoginStates {}
 
@@ -8,14 +6,11 @@ class ShowPasswordLoginScreen extends LoginStates{}
 
 class ShowCorrectEmailLoginScreen extends LoginStates{}
 
-
 class LoginLoadingState extends LoginStates{}
 
 class LoginSuccessState extends LoginStates{
-  // Model
-
-  final LoginModel loginModel;
-  LoginSuccessState(this.loginModel);
+  final dynamic uId;
+  LoginSuccessState(this.uId);
 }
 
 class LoginErrorState extends LoginStates{

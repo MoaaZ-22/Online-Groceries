@@ -39,7 +39,7 @@ class RegisterScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 14,fontFamily: 'GilroySemiBold'),)));
             } else if (state is RegisterErrorState)
             {
-              showToast(message: 'Error With Your Data', state: ToastStates.error);
+              showToast(message: state.error!, state: ToastStates.error);
             }
         },
         builder: (context, state)
@@ -167,7 +167,7 @@ class RegisterScreen extends StatelessWidget {
                                 {
                                   if(registerKey.currentState!.validate())
                                   {
-                                    registerCubit.createUser
+                                    registerCubit.userRegister
                                       (
                                       name: registerNameTextController.text,
                                       email: registerEmailTextController.text,

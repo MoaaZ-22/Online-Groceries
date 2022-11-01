@@ -1,10 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online_groceries_app/models/Login_Model/login_model.dart';
 import 'package:online_groceries_app/modules/Login_Screen/Login_Cubit/states.dart';
-import '../../../shared/network/end_points.dart';
-import '../../../shared/network/remote/dio_helper.dart';
 
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -68,23 +66,20 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ShowCorrectEmailLoginScreen());
   }
 
-  LoginModel? loginModel;
-  void login({required String? email, required String? password})
+  void userLogin({required email, required password})
   {
     emit(LoginLoadingState());
-    DioHelper.postData(url: SIGNIN, data:
+
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value)
     {
-      'email' : email,
-      'password' : password
-    }
-    )
-        .then((value) {
-       loginModel =LoginModel.fromJson(value.data);
-       print(loginModel!.msg);
-       print(loginModel!.user!.name);
-       print(loginModel!.user!.token);
-       emit(LoginSuccessState(loginModel!));
-    })
-        .catchError((error){emit(LoginErrorState(error: error.toString()));});
+      // For Check
+      print(value.user!.email);
+      print(value.user!.uid);
+      // Emit Success State
+      emit(LoginSuccessState(value.user!.uid));
+    }).catchError((error)
+    {
+      emit(LoginErrorState(error: error.toString()));
+    });
   }
 }
