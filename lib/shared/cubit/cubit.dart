@@ -210,6 +210,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   List<ProductModel> exclusiveOffer= [];
+  List<ProductModel> exclusiveImage= [];
+  List<ProductModel> bestImage= [];
+  List<ProductModel> allImage= [];
   List<ProductModel> bestSelling= [];
   List<ProductModel> all = [];
 
@@ -224,6 +227,7 @@ class AppCubit extends Cubit<AppStates> {
       {
         exclusiveOffer.add(ProductModel.fromJason(element.data()));
       }
+
       print('${exclusiveOffer[1].name} --------------------------------------------- 3');
       emit(GetExclusiveProductSuccessState());
     }
@@ -245,8 +249,9 @@ class AppCubit extends Cubit<AppStates> {
       for (var element in value.docs)
       {
         bestSelling.add(ProductModel.fromJason(element.data()));
+
       }
-      print('${bestSelling[1].name} --------------------------------------------- 4');
+      print('${bestSelling[3].carbs} --------------------------------------------- 4');
       emit(GetBestSellingProductSuccessState());
     }
     )
@@ -278,7 +283,6 @@ class AppCubit extends Cubit<AppStates> {
       emit(GetAllProductErrorState());
     });
   }
-
 
   List<ProductModel> pulses= [];
   List<ProductModel> rice = [];
@@ -326,5 +330,35 @@ class AppCubit extends Cubit<AppStates> {
       emit(GetCategoriesErrorState());
     });
   }
+
+
+
+  void increaseQuantity({required int quantity})
+  {
+    if(quantity == 20)
+    {
+      quantity = 20;
+    }
+    else
+    {
+      quantity++;
+    }
+    emit(IncreaseAndDecreaseQuantity());
+  }
+
+  void decreaseQuantity({required int quantity})
+  {
+    if(quantity == 1)
+    {
+      quantity = 1;
+    }
+    else
+    {
+      quantity--;
+    }
+    emit(IncreaseAndDecreaseQuantity());
+  }
 }
+
+
 

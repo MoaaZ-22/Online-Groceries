@@ -147,7 +147,7 @@ class ShopScreen extends StatelessWidget {
                           separatorBuilder: (context, index) => const SizedBox(width: 15.2,),
                           itemBuilder: (context, index)
                           {
-                            return ShopItemCard(model: exclusiveOffer[index], onTap: (){navigateTo(context, const ItemDetails());},);
+                            return ShopItemCard(model: exclusiveOffer[index], onTap: (){navigateTo(context,ItemDetails(model: exclusiveOffer[index],));},);
                           },
                           scrollDirection: Axis.horizontal,
                           itemCount: exclusiveOffer.length,),
@@ -165,7 +165,7 @@ class ShopScreen extends StatelessWidget {
                           separatorBuilder: (context, index) => const SizedBox(width: 15.2,),
                           itemBuilder: (context, index)
                           {
-                            return ShopItemCard(model: bestSelling[index], onTap: (){navigateTo(context, const ItemDetails());});
+                            return ShopItemCard(model: bestSelling[index], onTap: (){navigateTo(context, ItemDetails(model: bestSelling[index]));});
                           },
                           scrollDirection: Axis.horizontal,
                           itemCount: bestSelling.length,),
@@ -208,7 +208,7 @@ class ShopScreen extends StatelessWidget {
                           separatorBuilder: (context, index) => const SizedBox(width: 15.2,),
                           itemBuilder: (context, index)
                           {
-                            return ShopItemCard(model: all[index], onTap: (){navigateTo(context, const ItemDetails());});
+                            return ShopItemCard(model: all[index], onTap: (){navigateTo(context, ItemDetails(model: all[index]));});
                           },
                           scrollDirection: Axis.horizontal,
                           itemCount: all.length,),

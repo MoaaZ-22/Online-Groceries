@@ -56,3 +56,5 @@ class GetAllProductErrorState extends AppStates{}
 class GetCategoriesLoadingState extends AppStates{}
 class GetCategoriesSuccessState extends AppStates{}
 class GetCategoriesErrorState extends AppStates{}
+
+class IncreaseAndDecreaseQuantity extends AppStates{}

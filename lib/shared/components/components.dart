@@ -308,6 +308,74 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({context, Col
         style: const TextStyle(fontSize: 14,fontFamily: 'GilroySemiBold'),)));
 }
 
+class ReusableExpansionTile extends StatelessWidget {
+  final String? title;
+  final String? description;
+  final String? nutrition;
+  final List<Widget>? children;
+  const ReusableExpansionTile({Key? key, this.title, this.description, this.nutrition, this.children}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        childrenPadding: const EdgeInsets.only(bottom: 10),
+        tilePadding: EdgeInsets.zero,
+        title: nutrition == null? Text(title!,
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+        ) : Row(
+          children: [
+            Text(title!,
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+            ),
+            const Spacer(),
+            Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: const Color(0xffEBEBEB),
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                child: Text(nutrition!, style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 9,color: const Color(0xff7C7C7C)),))
+          ],
+        ),
+        iconColor: Colors.black,
+        collapsedIconColor: Colors.black,
+        children: [
+          nutrition == null ? 
+          Text(description!,
+            style:  const TextStyle(fontSize: 13, color: Colors.grey, fontFamily: 'GilroyMedium'),
+          ) 
+              :
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0,bottom: 8.0),
+            child: Column(
+              children: children!,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ReusableNutritionRow extends StatelessWidget {
+  final String? text;
+  final String? details;
+  const ReusableNutritionRow({Key? key, this.text, this.details}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(text!, style:  TextStyle(fontSize: 13, color: rateColor, fontFamily: 'GilroyBold'),),
+        Text(details!, style:  const TextStyle(fontSize: 13, color: Colors.grey, fontFamily: 'GilroyMedium'),),
+      ],
+    );
+  }
+}
+
 
 
 

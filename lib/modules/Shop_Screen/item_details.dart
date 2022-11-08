@@ -1,25 +1,41 @@
 // ignore_for_file: avoid_print
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_groceries_app/shared/cubit/states.dart';
 import 'package:online_groceries_app/shared/styles/icons.dart';
 import 'package:rate/rate.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../models/Product_Model/product_model.dart';
 import '../../shared/components/components.dart';
 import '../../shared/cubit/cubit.dart';
 import '../../shared/styles/colors.dart';
 
-class ItemDetails extends StatelessWidget {
-  const ItemDetails({Key? key}) : super(key: key);
+class ItemDetails extends StatefulWidget {
+  final ProductModel model;
+  const ItemDetails({Key? key, required this.model}) : super(key: key);
 
   @override
+  State<ItemDetails> createState() => _ItemDetailsState();
+}
+
+class _ItemDetailsState extends State<ItemDetails> {
+  int quantity = 1;
+  @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
+
           return Scaffold(
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ReusableTextButton(onPressed: (){},buttonText: 'Add To Basket',color: defaultColor,textColor: Colors.white,),
+            ),
             backgroundColor: Colors.white,
             body: Stack(
               alignment: AlignmentDirectional.center,
@@ -36,32 +52,53 @@ class ItemDetails extends StatelessWidget {
                                 bottomRight: Radius.circular(25),
                                 bottomLeft: Radius.circular(25))),
                         height: MediaQuery.of(context).size.height * 0.41,
-                        child: CarouselSlider(
-                            items: AppCubit.get(context).detailsWidget,
-                            options: CarouselOptions(
-                                onPageChanged: (index, c) {
-                                  AppCubit.get(context)
-                                      .changeDetailsSmoothPage(index);
-                                },
-                                height: 125,
-                                initialPage:
-                                    AppCubit.get(context).detailsActiveIndex,
-                                pageSnapping: true,
-                                enableInfiniteScroll: true,
-                                reverse: false,
-                                autoPlay: false,
-                                viewportFraction: 1.0,
-                                autoPlayInterval: const Duration(seconds: 3),
-                                autoPlayAnimationDuration:
-                                    const Duration(seconds: 1),
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                scrollDirection: Axis.horizontal)),
+                        child: ConditionalBuilder(
+                          condition: widget.model.image != null,
+                          builder: (context) => CarouselSlider.builder(
+                              itemCount: widget.model.image!.length,
+                              itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex)
+                              {
+                                return CachedNetworkImage(
+                                  imageUrl: widget.model.image[itemIndex],
+                                  imageBuilder: (context, imageProvider) => Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: imageProvider
+                                        )
+                                    ),
+                                  ),
+                                  placeholder: (context , url) => circularProIndicator(),
+                                  errorWidget: (context, url, error) => const Center(child: Icon(Icons.error_outline, color: Colors.red,)),
+
+                                );
+
+                              },
+                              options: CarouselOptions(
+                                  onPageChanged: (index, c) {
+                                    AppCubit.get(context)
+                                        .changeDetailsSmoothPage(index);
+                                  },
+                                  height: 125,
+                                  initialPage:
+                                  AppCubit.get(context).detailsActiveIndex,
+                                  pageSnapping: true,
+                                  enableInfiniteScroll: false,
+                                  reverse: false,
+                                  autoPlay: false,
+                                  viewportFraction: 1.0,
+                                  autoPlayInterval: const Duration(seconds: 3),
+                                  autoPlayAnimationDuration:
+                                  const Duration(seconds: 1),
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  scrollDirection: Axis.horizontal)),
+                          fallback: (context) => circularProIndicator(),
+                        ),
                       ),
                       Positioned(
                         bottom: 25,
                         child: AnimatedSmoothIndicator(
                           activeIndex: AppCubit.get(context).activeIndex,
-                          count: AppCubit.get(context).sliderWidget.length,
+                          count: widget.model.image!.length,
                           effect: ExpandingDotsEffect(
                               dotHeight: 5,
                               dotColor: Colors.grey.shade400,
@@ -74,146 +111,134 @@ class ItemDetails extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                      child: Container(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 10, bottom: 15),
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Naturel Red Apple',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(fontFamily: 'GilroyBold'),
-                              ),
-                              const Spacer(),
-                              MaterialButton(
-                                  onPressed: () {
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 10, bottom: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  widget.model.name!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(fontFamily: 'GilroyBold'),
+                                ),
+                                const Spacer(),
+                                MaterialButton(
+                                    onPressed: () {
+                                    },
+                                    minWidth: 0,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(10),
+                                    child: Icon(
+                                      IconlyBroken.favourite,
+                                      color: defaultGreyColor,
+                                    ))
+                              ],
+                            ),
+                            Text(
+                              '1kg, Price',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: defaultGreyColor),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      if(quantity == 1)
+                                      {
+                                        quantity = 1;
+                                      }
+                                      else
+                                      {
+                                        quantity--;
+                                      }
+                                    });
                                   },
-                                  minWidth: 0,
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(10),
+                                  radius: 10,
+
                                   child: Icon(
-                                    IconlyBroken.favourite,
+                                    IconlyBroken.minus__1_,
+                                    size: 20,
                                     color: defaultGreyColor,
-                                  ))
-                            ],
-                          ),
-                          Text(
-                            '1kg, Price',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .copyWith(color: defaultGreyColor),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                onTap: (){},
-                                radius: 10,
-                                
-                                child: Icon(
-                                  IconlyBroken.minus__1_,
-                                  size: 20,
-                                  color: defaultGreyColor,
-                                ),
-                              ),const SizedBox(width: 8,),
-                              Container(
-                                alignment: AlignmentDirectional.center,
-                                width: 35.67,
-                                height: 35.67,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xffE2E2E2), width: 1),
-                                    borderRadius: BorderRadius.circular(13)),
-                                child: const Text(
-                                  '1',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                              const SizedBox(width: 8,),
-                              InkWell(
-                                onTap: (){},
-                                radius: 10,
-                                child: Icon(
-                                  IconlyBroken.plus,
-                                  size: 20,
-                                  color: defaultColor,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text('\$4.99', style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 24, color: Colors.black, fontFamily: 'GilroyBold'),),
-                              const SizedBox(width: 12,)
-                            ],
-                          ),
-                          const SizedBox(height: 15,),
-                          myDivider(),
-                          Theme(
-                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                            child: ExpansionTile(
-                              childrenPadding: const EdgeInsets.only(bottom: 10),
-                              tilePadding: EdgeInsets.zero,
-                              title: Text('Product Detail',
-                                style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
-                              ),
-                              iconColor: Colors.black,
-                              collapsedIconColor: Colors.black,
-                              children: const [
-                                Text('Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healthful and varied diet.',
-                                style:  TextStyle(fontSize: 13, color: Colors.grey, fontFamily: 'GilroyMedium'),
-                                )
-                              ],
-                            ),
-                          ),
-                          myDivider(),
-                          Theme(
-                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                            child: ExpansionTile(
-                              childrenPadding: const EdgeInsets.only(bottom: 10),
-                              tilePadding: EdgeInsets.zero,
-                              title: Row(
-                                children: [
-                                  Text('Nutrition\'s',
-                                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
                                   ),
-                                  const Spacer(),
-                                  Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffEBEBEB),
-                                        borderRadius: BorderRadius.circular(5)
-                                      ),
-                                      child: Text('100gr', style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 9,color: const Color(0xff7C7C7C)),))
-                                ],
-                              ),
-                              iconColor: Colors.black,
-                              collapsedIconColor: Colors.black,
-                              children: const [
-                                Text('Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healthful and varied diet.',
-                                  style:  TextStyle(fontSize: 13, color: Colors.grey, fontFamily: 'GilroyMedium'),
-                                )
+                                ),const SizedBox(width: 8,),
+                                Container(
+                                  alignment: AlignmentDirectional.center,
+                                  width: 35.67,
+                                  height: 35.67,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xffE2E2E2), width: 1),
+                                      borderRadius: BorderRadius.circular(13)),
+                                  child: Text(
+                                    '$quantity',
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                const SizedBox(width: 8,),
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      if(quantity == 20)
+                                      {
+                                        quantity = 20;
+                                      }
+                                      else
+                                      {
+                                        quantity++;
+                                      }
+                                    });
+                                  },
+                                  radius: 10,
+                                  child: Icon(
+                                    IconlyBroken.plus,
+                                    size: 20,
+                                    color: defaultColor,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text('\$${widget.model.price!}', style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 24, color: Colors.black, fontFamily: 'GilroyBold'),),
+                                const SizedBox(width: 12,)
                               ],
                             ),
-                          ),
-                          myDivider(),
-                          Theme(
-                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                            child: ExpansionTile(
-                              childrenPadding: const EdgeInsets.only(bottom: 10),
-                              tilePadding: EdgeInsets.zero,
-                              title: Row(
+                            const SizedBox(height: 15,),
+                            myDivider(),
+                            ReusableExpansionTile(
+                              title: 'Product Detail',
+                              description: widget.model.productDetail,
+                            ),
+                            myDivider(),
+                            ReusableExpansionTile(
+                              title: 'Nutrition',
+                              nutrition: '100Kg',
+                            children: [
+                              ReusableNutritionRow(text: 'Calories', details: widget.model.calories,),
+                              const SizedBox(height: 5,),
+                              ReusableNutritionRow(text: 'Fat', details: widget.model.fat,),
+                              const SizedBox(height: 5,),
+                              ReusableNutritionRow(text: 'Carbs', details: widget.model.carbs,),
+                              const SizedBox(height: 5,),
+                              ReusableNutritionRow(text: 'Protein', details: widget.model.protein,),
+                            ]),
+                            myDivider(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                              child: Row(
                                 children: [
                                   Text('Review',
                                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
@@ -222,27 +247,16 @@ class ItemDetails extends StatelessWidget {
                                   Rate(
                                     iconSize: 18,
                                     color: rateColor,
-                                    initialValue: 3.5,
-                                    readOnly: false,
+                                    initialValue: widget.model.review!.toDouble(),
+                                    readOnly: true,
                                     onChange: (value) => print(value),
                                   ),
                                 ],
                               ),
-                              iconColor: Colors.black,
-                              collapsedIconColor: Colors.black,
-                              children: const [
-                                Text('Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healthful and varied diet.',
-                                  style:  TextStyle(fontSize: 13, color: Colors.grey, fontFamily: 'GilroyMedium'),
-                                )
-                              ],
                             ),
-                          ),
-                          const SizedBox(height: 10,),
-                          ReusableTextButton(onPressed: (){},buttonText: 'Add To Basket',color: defaultColor,textColor: Colors.white,)
-                        ],
-                      ),
-                    ),
-                  ))
+                          ],
+                        ),
+                      ))
                 ]),
                 Positioned(
                   width: MediaQuery.of(context).size.width,

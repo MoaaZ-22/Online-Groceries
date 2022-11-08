@@ -41,7 +41,7 @@ class CategoriesScreen extends StatelessWidget {
           ),
           shrinkWrap: true,
           itemCount: list.length,
-          itemBuilder: (context, index) => ShopItemCard(model: list[index], onTap: (){pushReplacementNavigate(context, const ItemDetails());},)),
+          itemBuilder: (context, index) => ShopItemCard(model: list[index], onTap: (){pushReplacementNavigate(context, ItemDetails(model: list[index],));},)),
     );
   }
 }

@@ -34,12 +34,13 @@ class ShopItemCard extends StatelessWidget {
           children:
           [
             CachedNetworkImage(
-              imageUrl: model.image!,
-              errorWidget: (context, url, error) => SvgPicture.asset(
-                  height: MediaQuery.of(context).size.height*0.16,
-                  width: double.infinity,
-                  alignment: AlignmentDirectional.center,
-                  'assets/images/OrangeLogo.svg'),
+              imageUrl: model.image![0],
+              errorWidget: (context, url, error) => Center(
+                child: SvgPicture.asset(
+                    height: MediaQuery.of(context).size.height*0.16,
+                    width: double.infinity,
+                    'assets/images/OrangeLogo.svg'),
+              ),
               imageBuilder: (context, imageProvider) => Container(
                 height: MediaQuery.of(context).size.height*0.16,
                 width: double.infinity,
